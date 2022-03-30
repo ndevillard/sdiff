@@ -74,6 +74,11 @@ def tag(name):
     return None
 
 if __name__=="__main__":
+    verbose=False
+    if '-v' in sys.argv:
+        verbose=True
+        sys.argv.remove('-v')
+
     if len(sys.argv)!=3:
         print(f'''
 
@@ -89,27 +94,23 @@ if __name__=="__main__":
     # Parse reference headers
     ref=tag(sys.argv[1])
     print('-- reference: %d symbols' % len(ref))
-    #for s in ref: print(s)
+    if verbose:
+        for s in ref: print(s)
 
     # Parse candidate headers
     cand=tag(sys.argv[2])
     print('-- candidate: %d symbols' % len(cand))
-    # for s in cand: print(s)
+    if verbose:
+        for s in cand: print(s)
     
     # Loop on all symbols defined in ref
     for s_ref in ref:
-        #print('looking for:', s_ref.name)
         for s_can in cand:
             if s_ref==s_can:
                 s_ref.found+=1
-                #print('\tfound:', s_can.file)
 
-    print('-- symbols not defined anywhere')
+    print('-- ref symbols missing or different in cand')
     for s_ref in ref:
         if s_ref.found<1:
-            print('\t', s_ref)
-    print('-- symbols multiply defined')
-    for s_ref in ref:
-        if s_ref.found>1:
             print('\t', s_ref)
 

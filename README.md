@@ -7,20 +7,33 @@ symbols: constants, macros, typedefs, global variables, function
 prototypes, and function definitions. Each symbol is registered by name,
 file name, type, and function signature where applicable.
 
-## Use case
+## Use
 
-One header file is the reference, it contains all symbols that must be
-defined by a candidate.
+The program expects two names. Those names can either be a C header file
+or a directory containing C header files. For directories, no recursive
+search is performed, they must contain a flat structure with all header
+files at the same level.
 
-The other header file (or set of header files) is the candidate.
+The first provided name is the reference: it contains all symbols that
+need to be defined.
 
-`sdiff` compares the two header files to see if all the symbols declared in
-the reference also appear in the candidate. It will also detect symbols
-multiply defined, symbols that fail to appear, or symbols that are in the
-candidate and not in the reference.
+The second provided name is a candidate. All header files will be parsed
+and searched for symbols present in the reference.
 
-Hope that's useful
-Nicolas
+The program output describes:
 
+- What symbols are declared in both reference and candidate.
+- What symbols differ between reference and candidate.
 
+Differing symbols can be:
+
+- Symbols declared differently: one could be a function and another a macro
+- Structs that do not have identical members
+- Functions that do not have identical prototypes
+- Typedefs that have the same name but different definitions
+
+The program does not parse defines and macros, so they could have different
+values between reference and candidate.
+
+Run with `-v` to get more a verbose output.
 
