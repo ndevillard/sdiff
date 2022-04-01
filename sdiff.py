@@ -46,6 +46,16 @@ class Symbol:
                self.type==other.type and \
                self.sig==other.sig
 
+    def compare(self, other):
+        eq=0
+        if self.name!=other.name:
+            eq+=1
+        if self.type!=other.type:
+            eq+=1
+        if self.sig!=other.sig:
+            eq+=1
+        return eq
+
 def tagfile(filename):
     syms=[]
     p=os.popen('ctags-universal --kinds-c=+pLl --fields=Sk -f- '+filename, 'r')
@@ -109,8 +119,9 @@ if __name__=="__main__":
             if s_ref==s_can:
                 s_ref.found+=1
 
-    print('-- ref symbols missing or different in cand')
+    print(f'-- {sys.argv[1]} symbols missing or different in {sys.argv[2]}')
     for s_ref in ref:
         if s_ref.found<1:
             print('\t', s_ref)
+
 
